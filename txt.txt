@@ -1,0 +1,34 @@
+
+morph -> bpe 
+from collections import Counter, defaultdict
+import re
+
+# Предполагается, что у вас есть класс Morphology_Tok с методом tokenize_with_morpholog
+# и класс BPE_Tokenizer с методами build_vocab, get_stats, merge_vocab и bpe
+
+class CombinedTokenizer:
+    def __init__(self, text, num_merges):
+        self.text = text
+        self.num_merges = num_merges
+        self.morphology_tok = Morphology_Tok(text)
+        self.bpe_tok = BPE_Tokenizer(num_merges)
+
+    def tokenize(self):
+        # Получаем корни и окончания слов с помощью морфологического токенизатора
+        roots, endings = self.morphology_tok.tokenize_with_morpholog()
+
+        # Строим словарь для BPE токенизатора
+        self.bpe_tok.build_vocab(roots + endings)
+
+        # Применяем BPE алгоритм
+        self.bpe_tok.bpe()
+
+        # Возвращаем токены, полученные после BPE
+        return self.bpe_tok.vocab.keys()
+
+# Пример использования
+text = "Ваш текст для токенизации"
+num_merges = 100  # Количество итераций для BPE
+tokenizer = CombinedTokenizer(text, num_merges)
+tokens = tokenizer.tokenize()
+print(tokens)

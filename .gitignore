@@ -1,6 +1,9 @@
 /gpt
 /tokenizer.pkl
 /train_data
-/txt.txt
 /vocab.txt
 /wizard_of_oz.txt
+/token_to_id.json
+/token_to_id.pkl
+/id_to_token.json
+id_to_token.pkl
